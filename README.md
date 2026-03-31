@@ -1,143 +1,260 @@
 # College Placement Management System
 
-## Table of Contents
-- [College Placement Management System](#college-placement-management-system)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Features](#features)
-  - [Tech Stack](#tech-stack)
-  - [Project Structure](#project-structure)
-  - [User Roles](#user-roles)
-  - [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Clone the Repository](#clone-the-repository)
-    - [Backend Setup](#backend-setup)
-    - [Frontend Setup](#frontend-setup)
-  - [Contributors](#contributors)
+## Overview
 
-## Introduction
-The **College Placement Management System** is a web application designed to streamline and digitize the placement process in colleges and universities. Developed by final year students of **Rizvi College of Engineering**, the system features a multi-role platform catering to students, TPO (Training and Placement Officer), management, and super admin. It aims to minimize manual efforts, improve transparency, and provide real-time tracking of the placement cycle.
+The College Placement Management System is a full-stack web app that digitizes campus placement workflows. It supports four roles (student, TPO admin, management admin, superuser) with role-based access, job postings, applications, internships, notices, and profile management.
 
-## Features
-- **Student Portal**: Register and login, update profile, upload resume, view available job opportunities, apply for jobs, and track application status.
-- **TPO Admin Portal**: Post and manage job listings, approve/reject student applications, schedule interviews, upload offer letters.
-- **Management Admin Portal**: Access analytics, monitor placement stats, and view comprehensive reports.
-- **Super Admin Portal**: Full control of the system including onboarding TPOs and management users, managing system configurations.
-- **Cloudinary Integration**: Handles secure storage of profile pictures, resumes, and offer letters.
+## Core Roles and Workflows
+
+- Student: sign up, login, complete profile, upload resume/offer letters, apply to jobs, track status, manage internships, read notices.
+- TPO admin: post and manage jobs, review applicants, manage companies, view students by year/branch, send notices.
+- Management admin: manage TPO users, approve students, post jobs, manage companies, send notices, monitor data.
+- Superuser: manage management/TPO/student users and approve students.
+
+## Architecture at a Glance
+
+- Backend: Node.js + Express + MongoDB (Mongoose). JWT auth with a Bearer token.
+- Frontend: Vite + React + React Router. Role-based routing and guarded pages.
+- File handling: Multer upload middleware and Cloudinary for storage.
+- Email: Nodemailer via Gmail SMTP.
 
 ## Tech Stack
-- **Frontend**: Vite + React.js, Tailwind CSS, Bootstrap
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Authentication**: JSON Web Tokens (JWT)
-- **File Storage**: Cloudinary
-- **Styling**: Tailwind CSS, Bootstrap
+
+- Frontend: React, Vite, Tailwind CSS, Bootstrap
+- Backend: Node.js, Express
+- Database: MongoDB (Mongoose)
+- Auth: JWT (Bearer tokens)
+- File Storage: Cloudinary
 
 ## Project Structure
+
 ```plaintext
-├── frontend
-│   ├── public
-│   ├── src
-│   │   ├── api
-│   │   ├── assets
-│   │   ├── components
-│   │   │   ├── LandingPages
-│   │   │   └── students
-│   │   ├── context
-│   │   ├── hooks
-│   │   ├── pages
-│   │   ├── styles
-│   │   ├── utility
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── .env (NOTE: YOU NEED TO CREATE THIS FILE)
-│   ├── .gitignore
-│   ├── .eslint.config.js
-│   ├── index.html
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── postcss.config.js
-│   ├── tailwind.config.js
-│   └── vite.config.js
 ├── backend
 │   ├── config
 │   ├── controllers
 │   ├── middleware
 │   ├── models
 │   ├── routes
-│   ├── .env (NOTE: YOU NEED TO CREATE THIS FILE)
-│   ├── .gitignore
 │   ├── index.js
 │   ├── package.json
 │   └── package-lock.json
+├── frontend
+│   ├── public
+│   ├── src
+│   │   ├── components
+│   │   ├── context
+│   │   ├── pages
+│   │   ├── style
+│   │   ├── utility
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
 └── README.md
 ```
 
-## User Roles
-- **Students**: View and apply for jobs, update profile, track status, and upload resumes.
-- **TPO Admin**: Post jobs, manage applications, upload offer letters, and schedule interviews.
-- **Management Admin**: Access dashboards and reports for data-driven decision making.
-- **Super Admin**: Manage system settings, and create/manage TPO and Management users.
+## Backend Details
 
-## Installation
+### Express App
 
-### Prerequisites
-- Node.js and npm installed
-- MongoDB installed and running
-- Cloudinary account for file uploads
+- Serves static files for profile images, resumes, and offer letters.
+- Connects to MongoDB via Mongoose.
+- Exposes role-based route groups: /user, /student, /tpo, /management, /admin, /company.
+- Test route: /test returns "Working Fine!".
 
-### Clone the Repository
-```bash
-git clone https://github.com/moinmn/college-placement-management-system.git
-cd college-placement-management-system
+### Authentication
+
+- JWT tokens are issued on login and stored per user.
+- Auth middleware checks the Bearer token and validates it against the user record.
+
+### Data Models (Mongoose)
+
+- Users
+  - Core profile: name, email, password, role, profile photo, address.
+  - Student profile: roll number, UIN, department, year, GPA by semester, applied jobs, internships.
+  - TPO/Management profile: position.
+- Job
+  - Title, description, eligibility, salary, deadline.
+  - Company reference and applicant list with round status and offer letter.
+- Company
+  - Name, description, website, location, difficulty.
+- Notice
+  - Sender, receiver role, title, message, createdAt.
+
+### Cascading Behaviors
+
+- Deleting a job removes that job from all students' appliedJobs.
+- Deleting a company deletes its jobs.
+- Deleting a user removes them from job applicants and notices.
+
+## Frontend Details
+
+### Routing
+
+- Public pages: landing page, login/signup per role.
+- Protected routes are gated by role and profile completion status.
+- Layout includes Navbar, Sidebar, Breadcrumb, and Footer.
+
+### Role-Specific Areas
+
+- Student
+  - Dashboard, account, job listings, job detail, applied jobs, profile, internships, notices.
+- TPO admin
+  - Dashboard, students, job postings, companies, notices, approvals.
+- Management admin
+  - Dashboard, TPO user management, student approvals, job postings, companies, notices.
+- Superuser
+  - User management across roles and student approvals.
+
+## API Routes
+
+All secured endpoints require an Authorization header:
+
+```
+Authorization: Bearer <token>
 ```
 
-### Backend Setup
-1. Navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
-2. Install the necessary packages:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file for environment variables:
-   ```env
-   PORT=4518
-   MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-   CLOUDINARY_API_KEY=your_cloudinary_api_key
-   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-   SMTP_USER="your_email_id"
-   SMTP_PASS="your_app_password_to_be_generate_via_google_settings"
-   ```
-4. Start the backend server:
-   ```bash
-   npm start
-   ```
+### /user
 
-### Frontend Setup
-1. Navigate to the `frontend` folder:
-   ```bash
-   cd frontend
-   ```
-2. Install the necessary packages:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file for environment variables:
-   ```env
-   VITE_BACKEND_URL=http://localhost:4518
-   ```
-4. Start the frontend development server:
-   ```bash
-   npm run dev
-   ```
+- GET /detail
+- GET /all-users
+- GET /:userId
+- POST /upload-photo
+- POST /update-profile
+- POST /change-password
+
+### /student
+
+- POST /signup
+- POST /login
+- POST /upload-resume
+- POST /upload-offer-letter
+- POST /delete-offer-letter/:jobId/:studentId
+- PUT /job/:jobId/:studentId
+- GET /check-applied/:jobId/:studentId
+- POST /update-status/:jobId/:studentId
+- GET /internship
+- POST /update-internship
+- POST /delete-internship
+- GET /all-students-data-year-and-branch
+- GET /notify-interview-hired
+
+### /tpo
+
+- POST /login
+- POST /post-job
+- GET /jobs
+- POST /delete-job
+- GET /job/:jobId
+- GET /job/applicants/:jobId
+- GET /myjob/:studentId
+
+### /management
+
+- POST /login
+- GET /tpo-users
+- POST /deletetpo
+- POST /addtpo
+- POST /add-management
+- POST /add-student
+- POST /send-notice
+- GET /get-all-notices
+- GET /get-notice
+- POST /delete-notice
+
+### /admin
+
+- POST /login
+- GET /management-users
+- POST /management-add-user
+- POST /management-delete-user
+- GET /tpo-users
+- POST /tpo-add-user
+- POST /tpo-delete-user
+- GET /student-users
+- POST /student-add-user
+- POST /student-delete-user
+- POST /student-approve
+
+### /company
+
+- GET /company-detail
+- POST /add-company
+- POST /update-company
+- POST /delete-company
+- GET /company-data
+
+### /test
+
+- GET /test
+
+## Environment Variables
+
+### Backend (.env)
+
+```
+PORT=4518
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+SMTP_USER=your_email
+SMTP_PASS=your_email_app_password
+```
+
+### Frontend (.env)
+
+```
+VITE_BACKEND_URL=http://localhost:4518
+```
+
+## Local Setup
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- MongoDB (local or Atlas)
+- Cloudinary account
+- Gmail account with an app password for SMTP
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Scripts
+
+### Backend
+
+- npm start: start the API using nodemon
+
+### Frontend
+
+- npm run dev: start Vite dev server
+- npm run build: production build
+- npm run preview: preview the production build
+- npm run lint: run ESLint
+
+## Troubleshooting
+
+- If `vite` is not recognized, run `npm install` in the frontend directory and retry.
+- If login fails with "Session Expired", re-login to obtain a fresh JWT.
 
 ## Contributors
-- **Member 1**: [Moin MN](https://www.linkedin.com/in/moinnaik/)
-- **Member 2**: Rafat Muskan Shaikh
-- **Member 3**: Saquib Patel
-- **Member 4**: Neeraj Kumar
 
+- Arman Sunasara
+- Mohammad Varaliya
+- Rushik

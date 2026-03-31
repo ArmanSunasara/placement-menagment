@@ -30,14 +30,14 @@ function LandingHeroPage() {
       {/* Content */}
       <div className="relative z-20 max-w-5xl text-center">
         <h1 className="text-white text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight drop-shadow-md">
-          Empower Your Career with <br />
+          Take Charge of Your Future with<br />
           <span className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 text-transparent bg-clip-text">
             CPMS Portal
           </span>
         </h1>
 
         <p className="mt-6 text-gray-300 text-lg sm:text-xl font-light">
-          Discover opportunities, track progress, and connect with your tpo — all in one place.
+          Find opportunities, track your journey, and connect with your TPO — anytime, anywhere.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">

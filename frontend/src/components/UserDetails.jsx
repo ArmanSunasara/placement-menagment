@@ -445,9 +445,9 @@ function UserDetails() {
                             >
                               <option disabled value="undefined" className='text-gray-400'>Enter Your Department</option>
                               <option value="Computer">Computer</option>
-                              <option value="Civil">Civil</option>
+                              <option value="Civil">IT</option>
                               <option value="ECS">ECS</option>
-                              <option value="AIDS">AIDS</option>
+                              <option value="AIDS">Cyber </option>
                               <option value="Mechanical">Mechanical</option>
                             </Form.Select>
                           </FloatingLabel>
@@ -631,7 +631,7 @@ function UserDetails() {
                               disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                             >
                               <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
-                              <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
+                              <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Gujarat Secondary and Higher Secondary Education Board</option>
                               <option value="Central Board of Secondary Education (CBSE)">Central Board of Secondary Education (CBSE)</option>
                               <option value="Council for the Indian School Certificate Examinations (CISCE)">Council for the Indian School Certificate Examinations (CISCE)</option>
                               <option value="Other">Other</option>
@@ -715,7 +715,7 @@ function UserDetails() {
                               disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                             >
                               <option disabled value="undefined" className='text-gray-400'>Enter Your HSC Board Name</option>
-                              <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
+                              <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Gujarat Secondary and Higher Secondary Education Board</option>
                               <option value="Central Board of Secondary Education (CBSE)">Central Board of Secondary Education (CBSE)</option>
                               <option value="Council for the Indian School Certificate Examinations (CISCE)">Council for the Indian School Certificate Examinations (CISCE)</option>
                               <option value="Other">Other</option>
