@@ -1,8 +1,22 @@
 # College Placement Management System
 
-## Overview
+## Table of Contents
+- [College Placement Management System](#college-placement-management-system)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Features](#features)
+  - [Tech Stack](#tech-stack)
+  - [Project Structure](#project-structure)
+  - [User Roles](#user-roles)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Clone the Repository](#clone-the-repository)
+    - [Backend Setup](#backend-setup)
+    - [Frontend Setup](#frontend-setup)
+  - [Contributors](#contributors)
 
-The College Placement Management System is a full-stack web app that digitizes campus placement workflows. It supports four roles (student, TPO admin, management admin, superuser) with role-based access, job postings, applications, internships, notices, and profile management.
+## Introduction
+The **College Placement Management System** is a web application designed to streamline and digitize the placement process in colleges and universities. Developed by final year students of **Rizvi College of Engineering**, the system features a multi-role platform catering to students, TPO (Training and Placement Officer), management, and super admin. It aims to minimize manual efforts, improve transparency, and provide real-time tracking of the placement cycle.
 
 ## Core Roles and Workflows
 
